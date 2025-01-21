@@ -18,13 +18,13 @@ class Seperator:
 
 seperator=Seperator(2.5)
     
-while len(blue)<10:
+while len(blue)<n:
     x=random.uniform(-x1, x1)
     y=random.uniform(-y1, y1)
     if seperator(x,y):
         blue.append([x,y])
 
-while len(red)<10:
+while len(red)<n:
     x=random.uniform(-x1, x1)
     y=random.uniform(-y1, y1)
     if not seperator(x,y):
