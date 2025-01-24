@@ -1,0 +1,131 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amsfonts, epsfig}
+\usepackage{booktabs} % for better table formatting
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{bm}
+\pagestyle{fancy}
+\lfoot{\texttt{ematm0067.github.io}}
+\lhead{Introduction to AI - 03.3\_training - Conor}
+\rhead{\thepage}
+\cfoot{}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+
+\usetikzlibrary{shapes.misc}
+
+
+\usepackage{ifthen,calc}
+\newboolean{nopics}
+\setboolean{nopics}{false}
+
+
+\begin{document}
+
+\section*{Training a neural network.} 
+
+In the last section we looked at how neural networks are able to
+perform difficult inference tasks: through the careful choice of
+weights and biases they can produce complicated non-linear
+functions. This does not explain their power, there are lots of ways
+to produce complicated function, the challenge is learning the
+functions from data and we haven't discussed how neural networks are
+trained. We will discuss that here, but in a way that won't explain
+the full power of these networks; there is an unreasonable
+effectiveness to learning in deep-learning neural networks, deep here
+many networks with many layers and the role deepness plays in this
+unreasonable effectiveness is one of the mysteries.
+
+Sometimes too much is made of the fact that we don't fully understand
+how deep learning networks work, or, rather, why they work so
+well. However, one of the glories of engineering is that something can
+be useful even if you don't fully understand it and a mystery, of
+course, is exciting for scientists, it is a door you can hope to pass
+through.
+
+Anyway, we have already touched on the mechanism used to train a
+neural network. Basically, if you have an objective function, a
+measure how well something is working and some parameters that adjust
+the performance of the network as quantified using the objective
+function, then you can use some hill-climbing or optimisation
+algorithm to improve the performance and, in the case of neural
+networks, that algorithm is a variant of stochastic gradient
+descent\footnote{Here, as in a number of places in mathematics, we are
+very sloppy about which way we think of as up! We talk about
+hill-climbing algorithms and stochastic gradient descent, even though
+descending means going down, not climbing. This happens because, of
+course, the notion of up and down is metaphorical, are we minimising
+an error function or maximising some sort of likelihood function?
+Usually, by convention these days we head downwards, so if we are
+using a likelihood function we add a minus, but it is just a
+convention and all our terminology hasn't quite caught up. The other
+place you'll often see and up versus down confusion is when talking
+about search trees where you usually imagine the tree with the roots
+at the top!}. We have already seen the essential ingredients for this
+when we looked at logistic regression; basically we use cross-entropy
+loss as the objective and optimize it.
+
+\section*{Cross-entropy loss and SGD}
+
+Lets consider a typical situation, you have input $\mathbf{x}$ and
+output $\mathbf{y}$ so that $\mathbf{y}(\textbf{x};\theta)$ and the
+$\theta$ are a set of parameters. In the most straight-forward case
+these parameters will weights and biases for a neural
+network. Typically there will be a dataset
+\begin{equation}
+  \mathcal{D}=\{(\mathbf{x}^a,\mathbf{y}^a)|a=1\ldots N\}
+\end{equation}
+so, here, there are $N$ data points and I am using a superscript as
+the data index, a subscript will be used for the components of the
+vector, so the first data point in the list is
+\begin{equation}
+  \mathbf{x}^1=(x^1_1,x^1_2,\ldots,x^1_{n_x})
+\end{equation}
+and $n_x$ here is the size of the input, we will use $n_y$ for the
+size of the output. For a classification problem the $\mathbf{y}^a$
+will be \textsl{one hot vectors}, which means they will have a single
+one value corresponding to the class of the item and zeros for all the
+other entries, so if the first item in the data set belongs to class
+$k$ then
+\begin{equation}
+  \mathbf{y}^1=(0,0,\ldots,1,\ldots,0,0)
+\end{equation}
+Now we are using notation that is potentially confusing, $\mathbf{y}$
+without a superscript is a function, so $\mathbf{y}(\mathbf{x}^a)$ is
+a set of numbers calculated using the neural network based on the
+input $\mathf{x}^a$.
+
+We are ready to define the cross entropy loss, it is
+\begin{equation}
+  L=-\sum_{a=1}^N \sum_{i=1}^{n_y}y_i^a \log{p_i^a}
+\end{equation}
+where
+\begin{equation}
+  p_i^a=\sigma_i(\mathbf{y}^a)
+\end{equation}
+is the softmax. The second sum in the loss function has only one term
+since $y_i^a$ is mostly zero:
+\begin{equation}
+  -\sum_{i=1}^{n_y}y_i^a \log{p_i^a}=-\log{p_k^a}
+\end{equation}
+if the $a$th item belongs to class $k$. We can see that minimizing
+this is good, we want this probability to be close to one and
+$\log{1}=0$ while the log of numbers less than one are negative. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
+
