@@ -96,11 +96,11 @@ $k$ then
 Now we are using notation that is potentially confusing, $\mathbf{y}$
 without a superscript is a function, so $\mathbf{y}(\mathbf{x}^a)$ is
 a set of numbers calculated using the neural network based on the
-input $\mathf{x}^a$.
+input $\mathbf{x}^a$.
 
 We are ready to define the cross entropy loss, it is
 \begin{equation}
-  L=-\sum_{a=1}^N \sum_{i=1}^{n_y}y_i^a \log{p_i^a}
+  \mathcal{L}=-\frac{1}{N}\sum_{a=1}^N \sum_{i=1}^{n_y}y_i^a \log{p_i^a}
 \end{equation}
 where
 \begin{equation}
@@ -114,6 +114,121 @@ since $y_i^a$ is mostly zero:
 if the $a$th item belongs to class $k$. We can see that minimizing
 this is good, we want this probability to be close to one and
 $\log{1}=0$ while the log of numbers less than one are negative. 
+
+The standard way to minimize this is some version of gradient flow. We
+discussed gradient flow before when looking at regression; the idea is
+that we change all the parameters by a small amount along a direction
+that points down the $L$ landscape:
+\begin{equation}
+  \theta\leftarrow\theta-\eta\frac{\partial \mathcal{L}}{\partial \theta}
+\end{equation}
+where $\theta$ is a parameter of the model, one of the $W$s or $b$s,
+$\eta$ is the learning rate, a small number which allows the algorithm
+to move down towards the minimum, hopefully fast enough not to take
+forever, but with steps small enough not to overshoot and cause
+unstable, oscillating behaviour. Now the problem is how to calculate
+all the derivatives.
+
+At first this looks like it would be impossibly difficult, the models
+are very complicated and so calculating all the derivatives would be a
+lot of work. It is a lot of work, but we do not have to do it, the
+computer does it for us. This is one of the unsung miracles of our
+current age, basically, using the chain rule we know how to
+differentiate functions that can be written as one thing after
+another: if $y(x)=f(g(x))$, so you get $u$ from $x$ first by doing $g$
+to it and then $f$ to the result, we know that the rate of change of
+$y$ with $x$ is the multiple of how much $f$ changes with $g$ by how
+much $g$ changes with $x$:
+\begin{equation}
+  \frac{dy}{dx}=\frac{df}{dg}\frac{dg}{dx}
+\end{equation}
+Now, when we programme the neural network we are essentially telling
+the computer how do the calculation step-by-step, ultimately to
+calculate the computer breaks these instructions into still smaller
+steps, a series of elementary operations. The programme can keep track
+of these elementary steps and use the chain rule, and the product
+rule, to work out the derivative, this is called \texttt{autograd} and
+is an essential component of what has made modern machine learning
+possible, until recently, the human did the calculus, now the machine
+does it, allowing us to use much more complicated networks and to
+change them without having to redo all the mathematics.
+
+These is another problem; working out $\mathcal{L}$ as defined would
+take a long time, for neural networks to work we need to have a lot of
+data and so the calculation of the likelihood would take a huge number
+of calculations for just one small gradient step. However, it turns
+out that using a much smaller subset will give some reasonable sense
+of which direction to move in; approximating $\mathcal{L}$ from a
+\textsl{batch} of maybe ten or a 100 data points is often enough, the
+key thing is to use a different batch for each gradient step until you
+have gone through all the data, an achievement often called an
+\textsl{epoch}. Hence, we calculate
+\begin{equation}
+  \mathcal{L}(B)=-\frac{1}{N_B}\sum_{a\in B} \sum_{i=1}^{n_y}y_i^a \log{p_i^a}
+\end{equation}
+where $B$ is a batch, some $N_B$ sized subset of the total data and then do
+\begin{equation}
+  \theta\leftarrow\theta-\eta\frac{\partial \mathcal{L}(B)}{\partial \theta}
+\end{equation}
+for all the parameters $\theta$ before going on to the next batch.
+
+
+\begin{figure}[htb]
+\begin{center}
+  \includegraphics[width=3in]{03.3_objective.png}
+\end{center}
+\caption{A cartoon of an objective function, the $x$-axis stands in
+  for all the many parameter directions. There is a local minimum on
+  the left, if the system started off to the left of that and used
+  gradient descent it might get stuck in that local minimum. This
+  local minimum is intended as a stand-in for the hazards, like thin
+  valleys and saddle-points with only a few downward directions that
+  might slow down or ruin gradient descent.\label{fig:objective}}
+\end{figure}
+
+
+Weirdly, this process of using batches does not just make optimization
+quicker, it also make better. The $\mathcal{L}$ landscape is not a
+simple bowl; unlike simpler cases like regression where we expect an
+easy optimisation processes, the neural network is designed to produce
+non-linear maps and so, inevitably, it has a loss function that may
+have local minima and other annoying features: this is sketched out in
+Fig.~\ref{fig:objective}. Now if batches are used instead each
+gradient step will correspond to a different $\mathcal{L}(B)$ each
+approximating the objective, this is illustrated in
+Fig.~\ref{fig:objective_noise}. This introduces noise which should
+affect some features more than others, meaning that the descent is
+less likely to get stuck, the use of batches adds a little randomness
+which actually seems to make the optimization more robust.
+
+
+
+\begin{figure}[htb]
+\begin{center}
+  \includegraphics[width=3in]{03.3_objective_noise.png}
+\end{center}
+\caption{A cartoon of an objective function with batches. Here the blue line represents $\mathcal{L}$ and the red lines $\mathcal{L}(B)$ for different $B$. The local minimum isn't always a minimum and moves around a lot.\label{fig:objective_noise}}
+\end{figure}
+
+With this element of randomness this approach is called
+\textsl{stochastic gradient descent}, often referred to by its acronym
+SGD and is a very standard training algorithm. There are variation we
+won't explore further here that try to do things like improve the size
+of the gradient step to take into account the local behaviour of
+$\mathcal{L}$; the most common of these approaches is probably
+\textsl{Adam}. Beyond that there are a huge number of technique for
+improving training; for example, in \textsl{dropout} some of the nodes
+picked at random are switched off for each training step, this appears
+to make training robust and improve behaviour on data points not
+included in the training set.
+
+
+
+
+
+
+
+
 
 
 
