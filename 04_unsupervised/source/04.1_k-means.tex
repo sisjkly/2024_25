@@ -169,9 +169,23 @@ tell you something about the data.
   sexes..\label{fig:khawksk6}}
 \end{figure}
 
-
-
-
+As a final comment, one nice thing about the $k$-means algorithm is
+that it always converges, after a finite number of steps it will find
+the same centroids as in the previous iteration and halt. The thing
+that isn't so good is that it doesn't always stop at the same place,
+there is some depedence on the initial condition. Often, the algorithm
+will be run several times from different starting points to try to
+find the best clustering, we will return to the notion of best
+clustering in the next section, but, roughly, if
+\begin{equation}
+  \mathcal{C}=\{C_1,C_2,\ldots,C_k\}
+\end{equation}
+is a set of clusters  with corresponding centroids $\mathbf{c}_i$ then one the degree of dissimilarity
+\begin{equation}
+  J(\mathcal{C})=\sum_{i=1}^k\sum_{\mathbf{x}_j\in C_i}[d(\mathbf{x}_j,\mathbf{c}_i)]^2
+\end{equation}
+measures how good the clustering is; the lower the better, so the idea
+of multiple restarts is to run the algorithm a few times and pick the clustering with the lowest $J(\mathcal{C})$.
 
 \end{document}
 
