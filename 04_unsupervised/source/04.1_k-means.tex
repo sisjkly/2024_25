@@ -32,6 +32,14 @@ library in R and is copied in the unit github, wing and weight measurements are 
 \\
 CH=Cooper's, RT=Red-tailed, SS=Sharp-Shinned\\
 \\
+with a pretty unequal distribution:
+\begin{center}
+  
+\begin{tabular}{lcccc}
+  &CH&RT&SS&total\\
+  number&31&121&68&221
+  \end{tabular}
+\end{center}
 We can plot this data and the result is shown in Fig.~\ref{hawks_plot}. Obviously supervised learning works in this case and this would be useful if we found a hawk and didn't know how to identify it; from the decision boundaries we can see that knowing the wing length and weight would allow us to identify the hawk.
 
 \begin{figure}[htb]
@@ -122,7 +130,14 @@ corresponding to species and we had to use our intuition to suggest we
 need to look at other properties as well.
 
 In the next note we will think a bit more about how to pick $k$ and to
-assess the quality of our clustering once we have performed it.
+assess the quality of our clustering once we have performed it. The
+main point is that $k$-means works best when the clusters are
+spherical and roughly equal; obviously the Hawks data has clusters
+that are neither very spherical nor of equal size, though making a
+smaller data set with the same number of each hawk doesn't help,
+unsupervised learning still doesn't give clusters corresponding to the
+three hawk types, though, and this is the important point, it does
+tell you something about the data.
 
 \begin{figure}[htb]
 \begin{center}  
@@ -135,9 +150,10 @@ assess the quality of our clustering once we have performed it.
   would be peculiar to just measure distances in the mixed gram,
   milimeter space. Instead we standardize first, take away the mean
   and divide by the standard deviation, now the two components have no
-  units and have a similar spread of values. The first
-  values are randomly chosen near the middle to make it easier to see what's happening, usually we just pick $k$ of the points as the
-  initial centroids.\label{fig:khawks}}
+  units and have a similar spread of values. The first values are
+  randomly chosen near the middle to make it easier to see what's
+  happening, usually we just pick $k$ of the points as the initial
+  centroids.\label{fig:khawks}}
 \end{figure}
 
 
