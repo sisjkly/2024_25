@@ -27,10 +27,10 @@ def plot_clusters(ax, X, centroids, labels, iteration, position):
         ax.scatter(centroids[:, 0], centroids[:, 1], s=200, c='yellow', marker='*', edgecolor='k')
     #ax.legend()
     # Set labels only for leftmost and bottom plots
-    if position % 2 == 0:  # Leftmost plots (0 and 2 in 0-based index)
-        ax.set_ylabel('Weight (standardized)')
-    if position >= 2:  # Bottom plots (2 and 3 in 0-based index)
-        ax.set_xlabel('Wing (standardized)')
+    if position % 3 == 0:  # Leftmost plots (0 and 2 in 0-based index)
+        ax.set_ylabel('Weight (stdized)')
+    if position >= 6:  # Bottom plots (2 and 3 in 0-based index)
+        ax.set_xlabel('Wing (stdized)')
     
     ax.set_title(f'Iteration {iteration}')
     #ax.legend()
