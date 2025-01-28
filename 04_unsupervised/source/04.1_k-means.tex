@@ -35,22 +35,23 @@ CH=Cooper's, RT=Red-tailed, SS=Sharp-Shinned\\
 with a pretty unequal distribution:
 \begin{center}
   
-\begin{tabular}{lcccc}
+\begin{tabular}{l|cccc}
   &CH&RT&SS&total\\
+  \hline
   number&31&121&68&221
   \end{tabular}
 \end{center}
-We can plot this data and the result is shown in Fig.~\ref{hawks_plot}. Obviously supervised learning works in this case and this would be useful if we found a hawk and didn't know how to identify it; from the decision boundaries we can see that knowing the wing length and weight would allow us to identify the hawk.
+We can plot this data and the result is shown in Fig.~\ref{fig:hawks_plot}. Obviously supervised learning works in this case and this would be useful if we found a hawk and didn't know how to identify it; from the decision boundaries we can see that knowing the wing length and weight would allow us to identify the hawk.
 
 \begin{figure}[htb]
 \begin{center}  
   \includegraphics{hawks_plot.png}
 \end{center}
-\caption{The hawk data is plotted wiht wing length and weight; the three species have been marked by colour. Clearly the three species correspond to different clusters and logistic regression has been used to find the two decision boundaries plotted as black dashed lines, these are pretty accurate.\label{fig:hawks_plot}}
+\caption{The hawk data is plotted with wing length and weight; the three species have been marked by colour. Clearly the three species correspond to different clusters and logistic regression has been used to find the two decision boundaries plotted as black dashed lines, these are pretty accurate.\label{fig:hawks_plot}}
 \end{figure}
 
-In this case we are clearly benifitting from the expertise of the
-people who supplied the data. The machine learning algorithim isn't
+In this case we are clearly benefiting from the expertise of the
+people who supplied the data. The machine learning algorithm isn't
 doing something new for us, it isn't working out how many different
 types of hawks there are, or discovering stuff we didn't know; instead
 it is allowing us to apply to new data points, new hawks, a
@@ -64,7 +65,7 @@ n\begin{figure}[htb]
 \begin{center}  
   \includegraphics{hawks_plot_unlabel.png}
 \end{center}
-\caption{The hawk data is plotted wiht wing length and weight but without labels, it isn't so clear that there should be three clusters, it looks more like five or six, maybe the sex of the hawks also has an affect. Unsupervised learning is hard!\label{fig:hawks_plot}}
+\caption{The hawk data is plotted with wing length and weight but without labels, it isn't so clear that there should be three clusters, it looks more like five or six, maybe the sex of the hawks also has an affect. Unsupervised learning is hard!\label{fig:hawks_unlabel}}
 \end{figure}
 
 Unsupervised learning, studying unlabelled data, is about discovering
@@ -121,7 +122,7 @@ hoping to discover hawk species this way we would fail, it clusters
 together the CT and SS hawks and splits the RT into two. However, we
 also learn something, we learn that this is what the unsupervised
 algorithm sees and as data scientists we'd consider if we had the
-correct value of $k$. In Fig.~ref{fig:khawksk6} we use $k=6$ and get
+correct value of $k$. In Fig.~\ref{fig:khawksk6} we use $k=6$ and get
 something more like we might expect. Hopefully this shows the
 advantages and the disadvantages of using $k$-means, we started off
 hoping to discover species using the clustering, in the end we learned
@@ -169,14 +170,16 @@ tell you something about the data.
   sexes..\label{fig:khawksk6}}
 \end{figure}
 
-As a final comment, one nice thing about the $k$-means algorithm is
-that it always converges, after a finite number of steps it will find
-the same centroids as in the previous iteration and halt. The thing
-that isn't so good is that it doesn't always stop at the same place,
-there is some depedence on the initial condition. Often, the algorithm
-will be run several times from different starting points to try to
-find the best clustering, we will return to the notion of best
-clustering in the next section, but, roughly, if
+\subsection*{A few final comments!}
+
+One nice thing about the $k$-means algorithm is that it always
+converges, after a finite number of steps it will find the same
+centroids as in the previous iteration and halt. The thing that isn't
+so good is that it doesn't always stop at the same place, there is
+some depedence on the initial condition. Often, the algorithm will be
+run several times from different starting points to try to find the
+best clustering, we will return to the notion of best clustering in
+the next section, but, roughly, if
 \begin{equation}
   \mathcal{C}=\{C_1,C_2,\ldots,C_k\}
 \end{equation}
@@ -185,7 +188,95 @@ is a set of clusters  with corresponding centroids $\mathbf{c}_i$ then one the d
   J(\mathcal{C})=\sum_{i=1}^k\sum_{\mathbf{x}_j\in C_i}[d(\mathbf{x}_j,\mathbf{c}_i)]^2
 \end{equation}
 measures how good the clustering is; the lower the better, so the idea
-of multiple restarts is to run the algorithm a few times and pick the clustering with the lowest $J(\mathcal{C})$.
+of multiple restarts is to run the algorithm a few times and pick the
+clustering with the lowest $J(\mathcal{C})$. In fact,
+Fig.~\ref{fig:khawks_different_starts} shows that $k$-means sometimes
+produces the `correct' clustering for our hawk data.
+
+
+\begin{figure}[htb]
+    \begin{tabular}{ll}
+      \textbf{A}&\textbf{B}\\
+      \includegraphics{04.1_khawks_142.png}&
+      \includegraphics{04.1_khawks_42.png}
+    \end{tabular}
+    \caption{Here the initial conditions are chosen differently for
+      the $k$-means algorithm, \textbf{A} shows the same behaviour we
+      have seen before, splitting the RT's into two clusters and
+      making one cluster out of CH and SS; \textbf{B} on the other
+      hand comes close to having a cluster for hawk type. The quantity
+      $J$ his nearly the same for each, $J=37.27$ for \textbf{A} and
+      $J=37.31$ for \textbf{B}, showing that the difference between
+      the unsupervised clustering and the clusters based on species is
+      not a result of the algorithm not finding the solution reliably,
+      it reflects the fact that the clustering is, itself, ambiguous,
+      there are two different, equally good, clusterings as far as
+      $k$-means is concerned!
+\label{fig:khawks_different_starts}}
+\end{figure}
+
+
+
+Mostly we have been thinking about using the Euclidean distance
+function here, of course, the choice of distance is important and the
+method only works in so far as the distance represents difference. In
+the examples above we used standardised distances in an attempt to
+match up the notion that the differences in the weight and the
+differences in the wing length where somehow comparable, even if one
+is measured in grammes and the other in milimeters. We then put them
+together like so
+\begin{equation}
+  d(\textbf{x},\textbf{y})=|\textbf{x}-\textbf{y}|=\sqrt{\sum_i (x_i-y_i)^2}
+\end{equation}
+but there are other ways that this can be done; for example you could
+use the Manhattan or $L^1$ metric\footnote{These are two names for the
+same thing, this distance is called the Manhattan metric because, as
+explained in the next paragraph, it resembles travel in a city with a
+grid system, it is called $L^1$ because it is part of a family of metrics, the $L^p$ metrics where $p=2$ corresponds to the Euclidean distance.}.
+\begin{equation}
+  d_1(\mathbf{x},\mathbf{y})=\sum_i |x_i-y_i|
+\end{equation}
+In one way all this choice, the choice of $k$ we discuss in the next
+note, the choice of metric, makes $k$-means a slippery sort of
+technology; it is not very good a \textsl{proving} things, conversely
+it is useful for discovering things because you can try different
+stuff, see what works and then try to understand why that worked.
+
+Why would the Manhattan distance be better in some situations. It all
+depends on where the structure is in relationships. Imaging have
+information about lots of people living in Manhattan, north of the
+Village, where the grid system is rigid, all the roads run north-south
+or east-west. Imagine you thought that by clustering people by how far
+they lived from each other you could find neighbourhoods, obviously
+the appropriate metric is the $L^1$ metric since that determined how
+far one person is from another in walking distance, the Euclidean, as
+the crow flies, distance is irrelevant!
+
+There are situations where you can measure a distance between two
+data-points even if they don't live in some sensible space. An example
+might be something like this: imagine you want to investigate coffee,
+you want to see if there are clusters of different coffee types. You
+could get a lot of tasters and test to see if they are able to
+distinguish between pairs of coffee, you can ask the tasters for each
+pair ``are these two samples from the same beans or different
+beans?'', sometimes doing this when the beans are the same so the
+question is genuine. Now you could define the distance between two
+types of beans as the number of people who said ``different'' in the
+task above. Now, although you have distances between beans, you don't
+have space they live in, you can't work out a centroid for a cluster
+because you can't add or divide coffee beans, only vectors. In this
+case you can use the $k$-medoids algorithm, the idea here is to
+replace the centroid with the \textsl{medoid}, the `middle-est' point in
+the cluster. For each point in a cluster $C_i$ you can get a score $M$
+\begin{equation}
+  M(C_i,\textbf{x})=\sum_{\mathbf{y}\in C_i} d(\mathbf{x},\mathbf{y})
+\end{equation}
+where $\mathbf{x}\in C_i$. The medoid is now the point that has the smallest value of $M$.
+
+
+
+
+
 
 \end{document}
 

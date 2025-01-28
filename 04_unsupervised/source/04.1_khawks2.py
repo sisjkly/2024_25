@@ -1,3 +1,6 @@
+#the "2" in the file name is for historical reasons
+#this does k=3 clustering with L^2
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
