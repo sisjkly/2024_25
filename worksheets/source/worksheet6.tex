@@ -1,0 +1,108 @@
+
+
+
+\documentclass[a4paper,12pt]{article}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{hyperref}
+\usepackage{geometry}
+\geometry{margin=1in}
+\title{Worksheet 6}
+
+\author{Conor Houghton, copying from Martha Lewis}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{Search Problems}
+
+\textbf{Question 1.} Consider the search tree shown below. The numbers on the branches are the costs.
+\begin{center}
+  \begin{tikzpicture}[scale=1]
+\tikzset{
+    leaf/.style={
+              circle,
+                   draw,
+                   minimum size=1cm
+    }
+}
+    \node (A)[leaf] at (-1,0) {A};
+    \node (B)[leaf] at (-2,-2) {B};
+    \node (C)[leaf] at (0,-2) {C};
+    \node (D)[leaf] at (-4,-4) {D};
+    \node (E)[leaf] at (-2,-4) {E};
+    \node (G)[leaf] at (0,-4) {G};
+    \node (H)[leaf] at (2,-4) {H};
+    \node (F)[leaf] at (-4,-6) {F};
+    \node (I)[leaf] at (1,-6) {I};
+    \node (J)[leaf] at (3,-6) {J};
+    \node (K)[leaf] at (-5,-8) {K};
+    \node (L)[leaf] at (-3,-8) {L};
+
+    \draw (A) -- node[left] {$1$} (B);
+    \draw (A) -- node[left] {$3$} (C);
+    \draw (B) -- node[right] {$1$} (D);
+    \draw (B) -- node[left] {$1$} (E);
+    \draw (C) -- node[left] {$1$} (G);
+    \draw (C) -- node[left] {$2$} (H);
+    \draw (D) -- node[right] {$1$} (F);
+    \draw (H) -- node[left] {$1$} (I);
+    \draw (H) -- node[left] {$1$} (J);
+    \draw (F) -- node[left] {$2$} (K);
+    \draw (F) -- node[left] {$2$} (L);
+
+
+    
+\end{tikzpicture}
+\end{center}
+
+Assume that the nodes are expanded in alphabetical order when no other order is specified by the search, and that the goal is state G. What order would the states be expanded by each type of search? Stop when you expand G.
+
+\begin{enumerate}
+    \item Depth First:
+    \item Breadth First:
+    \item Uniform Cost Search:
+\end{enumerate}
+
+\noindent \textbf{Question 2.} Consider the water jugs problem. You have a tap, a 5-litre bucket, and a 7-litre bucket. You need \textbf{EXACTLY} 4 litres of water. You may fill either bucket from the tap or the other bucket; you may empty either bucket into the drain or into the other bucket.
+
+\begin{enumerate}
+    \item What are the actions possible in a state where you have $S$ litres of water in the small bucket and $L$ litres in the large bucket?
+    \item Starting from the initial state (0,0), draw the search tree until you reach a goal node, with 4 litres of water in one or other of the buckets.
+    \item Would breadth or depth-first search be best to find the optimal solution? Why?
+\end{enumerate}
+
+\noindent \textbf{Question 3.} Below is a graph to be searched (from node S to node G).
+\begin{center}
+\includegraphics[width=5cm]{w6_q3_fig.png}
+\end{center}
+
+You are given a list of heuristic estimates at the states:
+\begin{align*}
+    A &= 2 \\
+    B &= 3 \\
+    C &= 1 \\
+    D &= 4 \\
+    S &= 10 \\
+    G &= 0
+\end{align*}
+Break ties using alphabetical order. Perform a best-first greedy search. Show the path to the goal.\\[1 cm]
+
+\noindent \textbf{Question 4.} We are given the following graph, where each node has an identifier and a heuristic value, while each edge has a cost.
+\begin{center}
+\includegraphics[width=8cm]{w6_q4_fig.png}
+\end{center}
+\begin{enumerate}
+    \item Show the order in which A* search sees nodes from S to G (goal node). For each node during the search, show its $f$ and $g$ values. If a node is reached on multiple paths, show its $f$ and $g$ values each time the node is reached, and indicate its parent node.
+    \item What is the solution path found?
+    \item Is the $h$ function admissible? Is it consistent?
+    \item Suppose you decide to do best-first search using the following evaluation function:
+    \begin{equation*}
+        f(n) = (1 - w) g(n) + w h(n)
+    \end{equation*}
+    Assuming that $h(n)$ is admissible, what are the values of $w$ that guarantee the algorithm will find an optimal solution?
+\end{enumerate}
+
+\end{document}
