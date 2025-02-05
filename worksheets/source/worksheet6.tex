@@ -77,8 +77,36 @@ Assume that the nodes are expanded in alphabetical order when no other order is 
 
 \noindent \textbf{Question 3.} Below is a graph to be searched (from node S to node G).
 \begin{center}
-\includegraphics[width=5cm]{w6_q3_fig.png}
+  \begin{tikzpicture}[scale=1]
+\tikzset{
+  thisNode/.style={
+    circle,
+                   draw,
+                   minimum size=1cm
+    }
+}
+    \node (A)[thisNode] at (-3.5,0.5) {A};
+    \node (C)[thisNode] at (0,1) {C};
+    \node (D)[thisNode] at (0.5,-1) {D};
+    \node (S)[thisNode] at (-4,-2) {S};
+    \node (B)[thisNode] at (-2,-4) {B};
+    \node (G)[thisNode] at (2.5,-2.5) {G};
+
+    \draw[->, thick, >=Latex] (A) -- (C);
+    \draw[->, thick, >=Latex] (A) -- (D);
+    \draw[->, thick, >=Latex] (D) -- (C);
+    \draw[->, thick, >=Latex] (D) -- (G);
+    \draw[->, thick, >=Latex] (S) -- (A);
+    \draw[->, thick, >=Latex] (S) -- (B);
+    \draw[->, thick, >=Latex] (B) -- (D);
+    \draw[->, thick, >=Latex] (B) -- (G);
+
+    
+\end{tikzpicture}
 \end{center}
+
+
+
 
 You are given a list of heuristic estimates at the states:
 \begin{align*}
