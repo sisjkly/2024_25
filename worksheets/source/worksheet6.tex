@@ -4,6 +4,7 @@
 \documentclass[a4paper,12pt]{article}
 \usepackage{amsmath}
 \usepackage{tikz}
+\usetikzlibrary{arrows.meta}
 \usepackage{hyperref}
 \usepackage{geometry}
 \geometry{margin=1in}
@@ -76,8 +77,36 @@ Assume that the nodes are expanded in alphabetical order when no other order is 
 
 \noindent \textbf{Question 3.} Below is a graph to be searched (from node S to node G).
 \begin{center}
-\includegraphics[width=5cm]{w6_q3_fig.png}
+  \begin{tikzpicture}[scale=1]
+\tikzset{
+  thisNode/.style={
+    circle,
+                   draw,
+                   minimum size=1cm
+    }
+}
+    \node (A)[thisNode] at (-3.5,0.5) {A};
+    \node (C)[thisNode] at (0,1) {C};
+    \node (D)[thisNode] at (0.5,-1) {D};
+    \node (S)[thisNode] at (-4,-2) {S};
+    \node (B)[thisNode] at (-2,-4) {B};
+    \node (G)[thisNode] at (2.5,-2.5) {G};
+
+    \draw[->, thick, >=Latex] (A) -- (C);
+    \draw[->, thick, >=Latex] (A) -- (D);
+    \draw[->, thick, >=Latex] (D) -- (C);
+    \draw[->, thick, >=Latex] (D) -- (G);
+    \draw[->, thick, >=Latex] (S) -- (A);
+    \draw[->, thick, >=Latex] (S) -- (B);
+    \draw[->, thick, >=Latex] (B) -- (D);
+    \draw[->, thick, >=Latex] (B) -- (G);
+
+    
+\end{tikzpicture}
 \end{center}
+
+
+
 
 You are given a list of heuristic estimates at the states:
 \begin{align*}
@@ -92,8 +121,35 @@ Break ties using alphabetical order. Perform a best-first greedy search. Show th
 
 \noindent \textbf{Question 4.} We are given the following graph, where each node has an identifier and a heuristic value, while each edge has a cost.
 \begin{center}
-\includegraphics[width=8cm]{w6_q4_fig.png}
+  \begin{tikzpicture}[scale=1]
+\tikzset{
+    thisNode/.style={
+                   draw,
+                   minimum size=1cm
+    }
+}
+    \node (A)[thisNode] at (0,0) {A};
+    \node (B)[thisNode] at (-2,-2) {B$_{h=20}$};
+    \node (C)[thisNode] at (0,-2) {C$_{h=6}$};
+    \node (D)[thisNode] at (2,-2) {D$_{h=1}$};
+    \node (E)[thisNode] at (-2,-4) {E$_{h=1}$};
+    \node (F)[thisNode] at (2,-4) {F$_{h=1}$};
+    \node (G)[thisNode] at (0,-6) {G$_{h=0}$};
+
+    \draw[->, thick, >=Latex] (A) -- node[left] {2} (B.north);
+    \draw[->, thick, >=Latex] (A) -- node[left] {6} (C.north);
+    \draw[->, thick, >=Latex] (A) -- node[right] {10} (D);
+    \draw[->, thick, >=Latex] (B) -- node[left] {10} (E);
+    \draw[->, thick, >=Latex] (C) -- node[left] {20} (G);
+    \draw[->, thick, >=Latex] (D) -- node[right] {2} (F);
+    \draw[->, thick, >=Latex] (E) -- node[left] {2} (G);
+    \draw[->, thick, >=Latex] (F) -- node[left] {20} (G);
+
+    
+\end{tikzpicture}
 \end{center}
+
+
 \begin{enumerate}
     \item Show the order in which A* search sees nodes from S to G (goal node). For each node during the search, show its $f$ and $g$ values. If a node is reached on multiple paths, show its $f$ and $g$ values each time the node is reached, and indicate its parent node.
     \item What is the solution path found?
